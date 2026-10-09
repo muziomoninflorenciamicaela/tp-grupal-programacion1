@@ -1,2 +1,4 @@
-# tp-grupal-programacion1
-Trabajo Práctico Grupal Programación 1 2026. Muzio Monin, Ruíz y Pisani.
+ # TRABAJO PRÁCTICO GRUPAL segundo parcial PROGRAMACIÓN I 2026
+Muzio Monin, Ruíz y Pisani.
+ ## Tema seleccionado:
+Nuestro proyecto simulará un algoritmo creado con el fin de mantener un orden en un taller mecánico.
