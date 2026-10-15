@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 #define placaN 8
 
  //Paso 0. Definir estructura.
@@ -32,11 +33,13 @@ typedef struct{
 	        printf("Ingrese la marca del auto que puede ser \n T si es un Toyota\n R si es una Ram \n P si es Peugeot \n B si es un Byd \n F si es una Ford \n V si es Volkswagen:");
 			scanf("%c", &AUX.marca);
 			AUX.marca = toupper(AUX.marca);
-		while(isalpha(AUX.marca)==false){
+		while(AUX.marca!='T' && AUX.marca!='R' && AUX.marca!='P' && AUX.marca!='B' && AUX.marca!='F' && AUX.marca!='V'){
+			fflush(stdin);
 		    printf("usted a ingresado mal algo fijese que puso\n");
 		    printf("Ingrese la marca del auto que puede ser \n T si es un Toyota\n R si es una Ram \n P si es Peugeot \n B si es un Byd \n F si es una Ford \n V si es Volkswagen: ");
 		    scanf("%c", &AUX.marca);
 			AUX.marca = toupper(AUX.marca);
+			fflush(stdin);
 		}
 		    printf("Ingrese la cantidad de horas necesarias para arreglarlo:");
 			scanf("%d", &AUX.horas);
@@ -66,21 +69,8 @@ typedef struct{
 			AUX.pendiente=true;
 		}
 	return AUX;}
-
- //Paso 1,a. Pedir datos (Parte 2).
-void pedirdatos(e_reparaciones lista,int autos){
-	char seguir='S';
-	FILE*archivo;
-	   archivo = fopen("empleados.txt","a");
-       if (archivo == NULL){
-	   printf("Error al abrir el archivo\n");
-}
-else{	
-	for(int i=0; i<autos && seguir=='S'; i++){
-	 lista = cargarauto();
-	 
-	 fprintf(archivo," %s %c %d %f %f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);
-	 fflush(stdin);
+char continuar(char seguir,int autos,int i){
+	fflush(stdin);
 	 if(i+1<autos){
 	 printf("quiere continuar agregando autos ponga S para si o N para no:");
 	 scanf("%c", &seguir);
@@ -95,26 +85,72 @@ else{
 	    fflush(stdin);
 		}
 	 }
+	 return seguir;
+}
+ //Paso 1,a. Pedir datos (Parte 2).
+void pedirdatos(e_reparaciones lista,int autos){
+	char seguir='S';
+	FILE*archivo;
+	   archivo = fopen("empleados.txt","a");
+       if (archivo == NULL){
+	   printf("Error al abrir el archivo\n");
+}
+else{	
+	for(int i=0; i<autos && seguir=='S'; i++){
+	 lista = cargarauto();
+	 fprintf(archivo," %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);
+		seguir=continuar(seguir,autos,i);
 	 }
 	 }
 	 fclose(archivo);
 return;}
-
-
  //Paso ?. Mostrar lista.
-void mostrarlista(e_reparaciones lista){
+void menu(e_reparaciones lista,int autos){
+int menu=-1;
+	while(menu!=0){
+		printf("Elija una opcion:\n Opcion 1: agregar DATOS.\n Opcion 2 MOSTRAR DATOS.\n Opcion 3 mostrar");
+		scanf("%d", &menu);
+		switch(menu){
 
-	printf("PLACA:\tMARCA:\tHORAS:\tPRECIO:");
-	for(int i=0; i<'n'; i++){
-		for(int j=0; lista.placa[j]!='\0'; j++) printf("%c", lista.placa[j]);
-			printf("\t");
-		printf("%c\t", lista.marca);
-		printf("%d\t", lista.horas);
-		printf("%.2f\n", lista.precio);}
-
+		case 1:{
+		char seguir='S';
+	FILE*archivo;
+	   archivo = fopen("empleados.txt","a");
+       if (archivo == NULL){
+	   printf("Error al abrir el archivo\n");
+}
+else{	
+	for(int i=0; seguir=='S'; i++){
+	 lista = cargarauto();
+	 fprintf(archivo," %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);
+		seguir=continuar(seguir,autos,i);
+	 }
+	 }
+	 fclose(archivo); 
+		break;
+		}
+		case 2:{
+			//listar por pantalla todo el archivo
+			FILE*archivo;
+	   archivo = fopen("empleados.txt","r");
+       if (archivo == NULL){
+	   printf("Error al abrir el archivo\n");}
+	   else{
+	   	printf("Placa||marca||horas||precio||cuanto pago||pago 1 si 0 debe\n ");
+			for(int i=0;fscanf(archivo," %s %c %d %f %f %d",lista.placa,&lista.marca,&lista.horas,&lista.precio,&lista.pago,&lista.pendiente )!=EOF;i++){
+			printf(" %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);	
+			}
+			break;
+		}
+		fclose(archivo);
+		}
+		case 3:{
+			
+			break;
+		}
+		}
+		}
 return;}
-
-
 int main(){
 int autos;
 	printf("porfavor ingrese cuantos autos va a ingresar:");
@@ -124,12 +160,6 @@ int autos;
 	pedirdatos(lista, autos);
 
  //Paso 2,?. Mostrar lista.
-	int menu=-1;
-	while(menu!=0){
-		printf("Elija una opcion:\n Opcion 1: MOSTRAR DATOS.\n Opcion 2:");
-		scanf("%d", &menu);
-		switch(menu){
-
-		case 1:{mostrarlista(lista); break;}}}
+	menu(lista,autos);
 
 return 0;}
