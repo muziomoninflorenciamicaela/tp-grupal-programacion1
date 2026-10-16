@@ -16,150 +16,203 @@ typedef struct{
 
 
  //Paso 1,a. Pedir datos (Parte 1).
-	e_reparaciones cargarauto(){
+int CANT(int autos){
 
+	printf("Ingrese cuantos autos/clientes se cargaran: ");
+	scanf("%d", &autos);
+		while(autos<=0){
+			puts("La cantidad asignada debe ser un numero entero positivo. Por favor, intente nuevamente.");
+			printf("Ingrese cuantos autos/clientes se cargaran: ");
+			scanf("%d", &autos);}
+
+return autos;}
+
+
+	e_reparaciones cargarauto(){
 		e_reparaciones AUX;
+
+	//Placa.
 		fflush(stdin);
-            printf("Ingrese el numero de placa del auto: ");
-		    fgets(AUX.placa, placaN, stdin);
-		    fflush(stdin);
-		for(int j=0; AUX.placa[j]!='\0'; j++){
-			AUX.placa[j] = toupper(AUX.placa[j]);
-			if(AUX.placa[j+1]=='\0'){
-				AUX.placa[j]='\0';
-			}
-			} 
+        printf("Ingrese el numero de placa del auto (7 caracteres): ");
+		fgets(AUX.placa, placaN, stdin);
+			for(int j=0; AUX.placa[j]!='\0'; j++){
+				AUX.placa[j] = toupper(AUX.placa[j]);
+				if(AUX.placa[j+1]=='\0') AUX.placa[j]='\0';}
+	//Marca.
 		fflush(stdin);
-	        printf("Ingrese la marca del auto que puede ser \n T si es un Toyota\n R si es una Ram \n P si es Peugeot \n B si es un Byd \n F si es una Ford \n V si es Volkswagen:");
-			scanf("%c", &AUX.marca);
-			AUX.marca = toupper(AUX.marca);
-		while(AUX.marca!='T' && AUX.marca!='R' && AUX.marca!='P' && AUX.marca!='B' && AUX.marca!='F' && AUX.marca!='V'){
-			fflush(stdin);
-		    printf("usted a ingresado mal algo fijese que puso\n");
-		    printf("Ingrese la marca del auto que puede ser \n T si es un Toyota\n R si es una Ram \n P si es Peugeot \n B si es un Byd \n F si es una Ford \n V si es Volkswagen: ");
-		    scanf("%c", &AUX.marca);
-			AUX.marca = toupper(AUX.marca);
-			fflush(stdin);
-		}
-		    printf("Ingrese la cantidad de horas necesarias para arreglarlo:");
-			scanf("%d", &AUX.horas);
-		while(AUX.horas<=0){
-            printf("usted a ingresado horas negativas esto no es posible\n");
-			printf("Ingrese la cantidad de horas necesarias para arreglarlo:");
-			scanf("%d", &AUX.horas); 
-		}
-		 printf("Ingrese el precio del arreglo:");
-			scanf("%f", &AUX.precio);
-		while(AUX.precio<=0){
-			printf("usted a ingresado precio negativas esto no es posible\n");
-			printf("Ingrese el precio del arreglo:");
-			scanf("%f", &AUX.precio);
-		}
-		printf("Ingrese la cantidad de plata que dio la persona:");
-			scanf("%f", &AUX.pago);
-		while(AUX.pago<0 or AUX.pago>AUX.precio){
-			printf("usted a ingresado mal cuanta plata tiene que pagar la persona\n");
-			printf("Ingrese la cantidad de plata que dio la persona:");
-			scanf("%f", &AUX.pago);
-		}
-		if(AUX.pago<AUX.precio){
-			AUX.pendiente=false;						
-		}
-		else{
-			AUX.pendiente=true;
-		}
+	    printf("Ingrese la marca del auto a partir de las siguientes opciones:\n T: Toyota.\n R: Ram.\n P: Peugeot.\n B: Byd.\n F: Ford.\n V: Volkswagen.\n");
+		scanf("%c", &AUX.marca); AUX.marca = toupper(AUX.marca);
+			while(AUX.marca!='T' && AUX.marca!='R' && AUX.marca!='P' && AUX.marca!='B' && AUX.marca!='F' && AUX.marca!='V'){
+				fflush(stdin);
+		    	puts("El caracter no coincide con las opciones brindadas. Por favor, intente nuevamente.");
+		    	printf("Ingrese la marca del auto a partir de las siguientes opciones:\n T: Toyota.\n R: Ram.\n P: Peugeot.\n B: Byd.\n F: Ford.\n V: Volkswagen.\n");
+				scanf("%c", &AUX.marca); AUX.marca = toupper(AUX.marca);}
+	//Horas.
+		printf("Ingrese la cantidad de horas necesarias para repararlo: ");
+		scanf("%d", &AUX.horas);
+			while(AUX.horas<=0){
+            	puts("La cantidad de horas cargadas debe ser un numero entero positivo. Por favor, intente nuevamente.");
+				printf("Ingrese la cantidad de horas necesarias para repararlo: ");
+				scanf("%d", &AUX.horas);}
+	//Precio.
+		printf("Ingrese el precio del arreglo: ");
+		scanf("%f", &AUX.precio);
+			while(AUX.precio<=0){
+				puts("El precio debe ser un valor positivo. Por favor, intente nuevamente.");
+				printf("Ingrese el precio del arreglo: ");
+				scanf("%f", &AUX.precio);}
+	//Pago + Pendiente.
+		printf("Ingrese la cantidad de dinero ya abonado por el cliente: ");
+		scanf("%f", &AUX.pago);
+			while(AUX.pago<0 || AUX.pago > AUX.precio){
+				if(AUX.pago<0) puts("El abono cargado debe ser un numero positivo. Por favor, intente nuevamente.");
+				else if(AUX.pago > AUX.precio) puts("El abono cargado debe ser menor o igual al precio de arreglo. Por favor, intente nuevamente.");
+				printf("Ingrese la cantidad de dinero ya abonado por el cliente: ");
+				scanf("%f", &AUX.pago);}
+		if(AUX.pago < AUX.precio) AUX.pendiente = false;						
+		else AUX.pendiente = true;
+
 	return AUX;}
-char continuar(char seguir,int autos,int i){
-	fflush(stdin);
-	 if(i+1<autos){
-	 printf("quiere continuar agregando autos ponga S para si o N para no:");
-	 scanf("%c", &seguir);
-	 fflush(stdin);
-	 seguir=toupper(seguir);
-	 while(seguir!='S' && seguir!='N'){
-	 	fflush(stdin);
-	 	printf("usted a ingresado una letra cualquiera\n");
-	 	printf("quiere continuar agregando autos ponga S para si o N para no:");
-	    scanf("%c", &seguir);
-	    seguir=toupper(seguir);
-	    fflush(stdin);
-		}
-	 }
-	 return seguir;
-}
+
+
+char continuar(char seguir, int autos, int i){ //Continuar o no la carga de datos
+
+	if(i+1<autos){
+		fflush(stdin);
+	 	printf("Desea continuar agregando autos/clientes a la lista? Responda con un caracter, siendo S: Si y N: No: ");
+	 	scanf("%c", &seguir); seguir = toupper(seguir);
+		while(seguir!='S' && seguir!='N'){
+	 		fflush(stdin);
+	 		puts("Caracter invalido. Por favor, intente nuevamente.");
+	 		printf("Desea continuar agregando autos/clientes a la lista? Responda con un caracter, siendo S: Si y N: No: ");
+	    	scanf("%c", &seguir); seguir = toupper(seguir);}}
+
+return seguir;}
+
+
  //Paso 1,a. Pedir datos (Parte 2).
-void pedirdatos(e_reparaciones lista,int autos){
-	char seguir='S';
-	FILE*archivo;
-	   archivo = fopen("empleados.txt","a");
-       if (archivo == NULL){
-	   printf("Error al abrir el archivo\n");
-}
-else{	
-	for(int i=0; i<autos && seguir=='S'; i++){
-	 lista = cargarauto();
-	 fprintf(archivo," %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);
-		seguir=continuar(seguir,autos,i);
-	 }
-	 }
-	 fclose(archivo);
+void pedirdatos(e_reparaciones LISTA, int autos){
+
+	char seguir='S'; FILE*archivo;
+	archivo = fopen("reparaciones.txt", "a");
+    if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{	
+		for(int i=0; i<autos && seguir=='S'; i++){
+			LISTA = cargarauto();
+			fprintf(archivo, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);
+			seguir = continuar(seguir, autos, i);}}
+
+	fclose(archivo);
+	return;}
+
+ //Paso 2,a. Menu (Parte 1).
+
+void opcion1(e_reparaciones LISTA, int autos){ //Agregar un registro al archivo.
+
+	char seguir='S'; FILE*archivo;
+	archivo = fopen("reparaciones.txt", "a");
+   	if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{	
+		for(int i=0; seguir=='S'; i++){
+	 		LISTA = cargarauto();
+	 		fprintf(archivo, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);
+			seguir = continuar(seguir, autos, i);}}
+	fclose(archivo);
+
 return;}
- //Paso ?. Mostrar lista.
-void menu(e_reparaciones lista,int autos){
-int menu=-1;
+
+
+void opcion2(e_reparaciones LISTA, int autos){ //Listar por pantalla todo el archivo.
+
+	FILE*archivo;
+	archivo = fopen("reparaciones.txt","r");
+    if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{
+	   	printf("Placa||Marca||Horas||Precio||Abono||Pago pendiente (Siendo 0: Si y 1: No)\n");
+		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
+			printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+	fclose(archivo);
+
+return;}
+
+
+void opcion3(e_reparaciones LISTA, int autos){ //Listar por pantalla solo los registros que cumplan alguna condicion. Condicion elegida: + de 8 horas de reparacion.
+
+	int condicionHORAS=8; FILE*archivo;
+	archivo = fopen("reparaciones.txt","r");
+    if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{
+		printf("Autos con mas de 8 horas de reparacion:\n");
+		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
+			if(LISTA.horas>=condicionHORAS) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+	fclose(archivo);
+
+return;}
+
+
+void opcion4(e_reparaciones LISTA, int autos){ //Busqueda especifica por alguno de los campos, preguntando al usuario que. Campo seleccionado: Marcas.
+
+	char eleccionMARCA;
+	fflush(stdin);
+	printf("Ingrese la marca de auto a listar a partir de las siguientes opciones:\n T: Toyota.\n R: Ram.\n P: Peugeot.\n B: Byd.\n F: Ford.\n V: Volkswagen.\n");
+	scanf("%c", &eleccionMARCA); eleccionMARCA = toupper(eleccionMARCA);
+		while(eleccionMARCA!='T' && eleccionMARCA!='R' && eleccionMARCA!='P' && eleccionMARCA!='B' && eleccionMARCA!='F' && eleccionMARCA!='V'){
+			fflush(stdin);
+		    puts("El caracter no coincide con las opciones brindadas. Por favor, intente nuevamente.");
+		    printf("Ingrese la marca de auto a listar a partir de las siguientes opciones:\n T: Toyota.\n R: Ram.\n P: Peugeot.\n B: Byd.\n F: Ford.\n V: Volkswagen.\n");
+			scanf("%c", &eleccionMARCA); eleccionMARCA = toupper(eleccionMARCA);}
+	FILE*archivo;
+	archivo = fopen("reparaciones.txt","r");
+    if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{
+		printf("Marca seleccionada: %c.\n", eleccionMARCA);
+		printf("Placa||Marca||Horas||Precio||Abono||Pago pendiente (Siendo 0: Si y 1: No)\n");
+		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
+			if(LISTA.marca==eleccionMARCA) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+	fclose(archivo);
+
+return;}
+
+
+ //Paso 2,a. Menu (Parte 2).
+void menu(e_reparaciones LISTA, int autos){
+
+	int menu=-1;
 	while(menu!=0){
-		printf("Elija una opcion:\n Opcion 1: agregar DATOS.\n Opcion 2 MOSTRAR DATOS.\n Opcion 3 mostrar");
+		printf("Elija una opcion:\n Opcion 1: AGREGAR DATOS.\n Opcion 2: Mostrar datos.\n Opcion 3: Mostrar lista de autos con mas de 8 horas de reparacion.\n Opcion 4: Listar datos por marca a eleccion.\n Opcion 5: .\n Opcion 0: Salir del sistema.\n");
 		scanf("%d", &menu);
 		switch(menu){
 
-		case 1:{
-		char seguir='S';
-	FILE*archivo;
-	   archivo = fopen("empleados.txt","a");
-       if (archivo == NULL){
-	   printf("Error al abrir el archivo\n");
-}
-else{	
-	for(int i=0; seguir=='S'; i++){
-	 lista = cargarauto();
-	 fprintf(archivo," %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);
-		seguir=continuar(seguir,autos,i);
-	 }
-	 }
-	 fclose(archivo); 
-		break;
-		}
-		case 2:{
-			//listar por pantalla todo el archivo
-			FILE*archivo;
-	   archivo = fopen("empleados.txt","r");
-       if (archivo == NULL){
-	   printf("Error al abrir el archivo\n");}
-	   else{
-	   	printf("Placa||marca||horas||precio||cuanto pago||pago 1 si 0 debe\n ");
-			for(int i=0;fscanf(archivo," %s %c %d %f %f %d",lista.placa,&lista.marca,&lista.horas,&lista.precio,&lista.pago,&lista.pendiente )!=EOF;i++){
-			printf(" %s %c %d %.2f %.2f %d \n",lista.placa,lista.marca,lista.horas,lista.precio,lista.pago,lista.pendiente);	
-			}
-			break;
-		}
-		fclose(archivo);
-		}
-		case 3:{
-			
-			break;
-		}
-		}
-		}
-return;}
-int main(){
-int autos;
-	printf("porfavor ingrese cuantos autos va a ingresar:");
-	scanf("%d", &autos);
- //Paso 1,b. Pedir datos.
-	e_reparaciones lista;
-	pedirdatos(lista, autos);
+			case 1:{ //Agregar un registro al archivo.
+				opcion1(LISTA, autos); break;}
 
- //Paso 2,?. Mostrar lista.
-	menu(lista,autos);
+			case 2:{ //Listar por pantalla todo el archivo.
+				opcion2(LISTA, autos); break;}
+
+			case 3:{ //Listar por pantalla solo los registros que cumplan alguna condicion. Condicion elegida: + de 8 horas de reparacion.
+				opcion3(LISTA, autos); break;}
+
+			case 4:{ //Busqueda especifica por alguno de los campos, preguntando al usuario que. Campo seleccionado: Marcas.
+				opcion4(LISTA, autos); break;}
+
+			case 5:{ //Dividir la informacion del archivo de origen en dos archivos de texto nuevos.
+				break;}
+
+			case 0:{ //Salir del sistema.
+				puts("Se cerro el programa."); break;}
+			default:{puts("Se ingreso una opcion invalida. Por favor, intente nuevamente."); break;}}}
+
+return;}
+
+
+int main(){
+
+ //Paso 1,b. Pedir datos.
+	int autos = CANT(autos);
+	e_reparaciones LISTA;
+	pedirdatos(LISTA, autos);
+
+ //Paso 2,b. Menu.
+	menu(LISTA, autos);
 
 return 0;}
