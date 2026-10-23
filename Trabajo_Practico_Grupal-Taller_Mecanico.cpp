@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
-#define placaN 8
+#define placaN 9
 
  //Paso 0. Definir estructura.
 typedef struct{
@@ -85,8 +85,8 @@ char continuar(char seguir, int autos, int i){ //Continuar o no la carga de dato
 	 		fflush(stdin);
 	 		puts("Caracter invalido. Por favor, intente nuevamente.");
 	 		printf("Desea continuar agregando autos/clientes a la lista? Responda con un caracter, siendo S: Si y N: No: ");
-	    	scanf("%c", &seguir); seguir = toupper(seguir);}}
-
+	    	scanf("%c", &seguir); seguir = toupper(seguir);}
+			}
 return seguir;}
 
 
@@ -100,23 +100,24 @@ void pedirdatos(e_reparaciones LISTA, int autos){
 		for(int i=0; i<autos && seguir=='S'; i++){
 			LISTA = cargarauto();
 			fprintf(archivo, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);
-			seguir = continuar(seguir, autos, i);}}
-
+			seguir = continuar(seguir, autos, i);}
+			}
 	fclose(archivo);
 	return;}
 
  //Paso 2,a. Menu (Parte 1).
 
 void opcion1(e_reparaciones LISTA, int autos){ //Agregar un registro al archivo.
-
-	char seguir='S'; FILE*archivo;
+ 
+	FILE*archivo;
 	archivo = fopen("reparaciones.txt", "a");
    	if(archivo==NULL) printf("Error al abrir el archivo.\n");
 	else{	
-		for(int i=0; seguir=='S'; i++){
+		for(int i=0; i<1; i++){
 	 		LISTA = cargarauto();
 	 		fprintf(archivo, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);
-			seguir = continuar(seguir, autos, i);}}
+			}
+			}
 	fclose(archivo);
 
 return;}
@@ -130,23 +131,22 @@ void opcion2(e_reparaciones LISTA, int autos){ //Listar por pantalla todo el arc
 	else{
 	   	printf("Placa||Marca||Horas||Precio||Abono||Pago pendiente (Siendo 0: Si y 1: No)\n");
 		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
-			printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+			printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}
+			}
 	fclose(archivo);
-
 return;}
 
 
 void opcion3(e_reparaciones LISTA, int autos){ //Listar por pantalla solo los registros que cumplan alguna condicion. Condicion elegida: + de 8 horas de reparacion.
-
 	int condicionHORAS=8; FILE*archivo;
 	archivo = fopen("reparaciones.txt","r");
     if(archivo==NULL) printf("Error al abrir el archivo.\n");
 	else{
 		printf("Autos con mas de 8 horas de reparacion:\n");
 		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
-			if(LISTA.horas>=condicionHORAS) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+			if(LISTA.horas>=condicionHORAS) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}
+			}
 	fclose(archivo);
-
 return;}
 
 
@@ -168,12 +168,39 @@ void opcion4(e_reparaciones LISTA, int autos){ //Busqueda especifica por alguno 
 		printf("Marca seleccionada: %c.\n", eleccionMARCA);
 		printf("Placa||Marca||Horas||Precio||Abono||Pago pendiente (Siendo 0: Si y 1: No)\n");
 		for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
-			if(LISTA.marca==eleccionMARCA) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}}
+			if(LISTA.marca==eleccionMARCA) printf(" %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}
+			}
 	fclose(archivo);
-
 return;}
 
 
+void opcion5(e_reparaciones LISTA, int autos){ //Dividir la informacion del archivo de origen en dos archivos de texto nuevos. Campo seleccionado: Pendiente.
+
+	FILE*archivo;
+	archivo = fopen("reparaciones.txt","r");
+    if(archivo==NULL) printf("Error al abrir el archivo.\n");
+	else{
+		 FILE*archivo2;
+		 archivo2 = fopen("pendiente.txt","w");
+    	 if(archivo2==NULL) printf("Error al abrir el archivo.\n");
+		 else{
+		 	  FILE*archivo3;
+			  archivo3 = fopen("abonado.txt","w");
+			  if(archivo3==NULL) printf("Error al abrir el archivo.\n");
+			  else{
+				   for(int i=0; fscanf(archivo, " %s %c %d %f %f %d", LISTA.placa, &LISTA.marca, &LISTA.horas, &LISTA.precio, &LISTA.pago, &LISTA.pendiente) != EOF; i++){
+			if(LISTA.pendiente==0){
+			fprintf(archivo2, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}
+			else if(LISTA.pendiente==1){
+			fprintf(archivo3, " %s %c %d %.2f %.2f %d \n", LISTA.placa, LISTA.marca, LISTA.horas, LISTA.precio, LISTA.pago, LISTA.pendiente);}
+					}	
+			}
+			fclose(archivo);
+		}
+		fclose(archivo);
+	}
+	fclose(archivo);
+}
  //Paso 2,a. Menu (Parte 2).
 void menu(e_reparaciones LISTA, int autos){
 
@@ -195,8 +222,8 @@ void menu(e_reparaciones LISTA, int autos){
 			case 4:{ //Busqueda especifica por alguno de los campos, preguntando al usuario que. Campo seleccionado: Marcas.
 				opcion4(LISTA, autos); break;}
 
-			case 5:{ //Dividir la informacion del archivo de origen en dos archivos de texto nuevos.
-				break;}
+			case 5:{ //Dividir la informacion del archivo de origen en dos archivos de texto nuevos. Campo seleccionado: Pendiente.
+   				opcion5(LISTA, autos); break;}
 
 			case 0:{ //Salir del sistema.
 				puts("Se cerro el programa."); break;}
